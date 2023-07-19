@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Chess.com Cheats",
+    "version": "0.0.0",
+    "action": { "default_popup": "index.html" },
+    "content_scripts": [
+        {
+            "js": ["content.js"],
+            "matches": ["https://chess.com/*"]
+        }
+    ]
+}
