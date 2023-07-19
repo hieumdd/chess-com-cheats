@@ -2,11 +2,17 @@
     "manifest_version": 3,
     "name": "Chess.com Cheats",
     "version": "0.0.0",
-    "action": { "default_popup": "index.html" },
+    "action": {},
     "content_scripts": [
         {
+            "matches": ["*://*.chess.com/*"],
             "js": ["content.js"],
-            "matches": ["https://chess.com/*"]
+            "run_at": "document_end"
         }
-    ]
+    ],
+    "background": {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    },
+    "permissions": ["activeTab"]
 }

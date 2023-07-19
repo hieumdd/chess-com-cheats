@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
     plugins: [
@@ -9,20 +9,22 @@ export default defineConfig({
             targets: [
                 {
                     src: './manifest.json',
-                    dest: '.'
-                }
-            ]
-        })],
+                    dest: '.',
+                },
+            ],
+        }),
+    ],
     build: {
         rollupOptions: {
             input: {
                 main: './index.html',
-                content: './src/content.ts'
+                content: './src/content.ts',
+                'service-worker': './src/service-worker.ts',
             },
             output: {
                 entryFileNames: '[name].js',
-                assetFileNames: '[name][extname]'
+                assetFileNames: '[name][extname]',
             },
-        }
-    }
+        },
+    },
 });
