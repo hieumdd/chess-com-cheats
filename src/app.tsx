@@ -7,7 +7,7 @@ function App() {
     const { register, watch } = useForm<EvaluationOptions>({
         defaultValues: {
             lines: '1',
-            depth: '31',
+            depth: '21',
             enabled: false,
         },
     });

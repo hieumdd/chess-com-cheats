@@ -15,7 +15,7 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
     useEffect(() => {
         if (enabled) {
             timerRef.current = setInterval(() => {
-                chrome.tabs.query({ active: true, url: '*://*.chess.com/play/*' }).then(([tab]) => {
+                chrome.tabs.query({ active: true, url: '*://*.chess.com/play*' }).then(([tab]) => {
                     if (tab) {
                         chrome.tabs.sendMessage(tab.id as number, { type: 'GET_PGN' }).then((pgn) => {
                             gameRef.current.loadPgn(pgn);
