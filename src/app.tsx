@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 
-import { EvaluationOptions } from './services/evaluation.service';
+import { EvaluationOptions } from './evaluation.type';
 import { useChess } from './hooks/use-chess';
 
 function App() {

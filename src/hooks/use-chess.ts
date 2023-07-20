@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 
-import { EvaluationOptions } from '../services/evaluation.service';
+import { EvaluationOptions } from '../evaluation.type';
 
 export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
     const timerRef = useRef<number | null>(null);
-    const gameRef = useRef(new Chess());
-    const stockfish = useRef(new Worker('stockfish.js'));
+    const game = useMemo(() => new Chess(), []);
+    const stockfish = useMemo(() => new Worker(`stockfish.js#stockfish.wasm`), [])
 
     const [fen, setFen] = useState('start');
     const [uci, setUCI] = useState('');
@@ -17,8 +17,8 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
                 chrome.tabs.query({ active: true, url: '*://*.chess.com/play*' }).then(([tab]) => {
                     if (tab) {
                         chrome.tabs.sendMessage(tab.id as number, { type: 'GET_PGN' }).then((pgn) => {
-                            gameRef.current.loadPgn(pgn);
-                            setFen(gameRef.current.fen());
+                            game.loadPgn(pgn);
+                            setFen(game.fen());
                         })
                     }
                 })
@@ -26,23 +26,21 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
         } else {
             clearInterval(timerRef.current as number);
         }
-
-        return () => clearInterval(timerRef.current as number);
-    }, [enabled]);
+    }, [game, enabled]);
 
     useEffect(() => {
-        stockfish.current.onmessage = (e) => {
+        stockfish.onmessage = (e) => {
             setUCI(e.data);
         };
     }, [])
 
     useEffect(() => {
-        stockfish.current.postMessage(`setoption name MultiPV value ${lines}`);
+        stockfish.postMessage(`setoption name MultiPV value ${lines}`);
     }, [lines])
 
     useEffect(() => {
-        stockfish.current.postMessage(`position fen ${fen}`);
-        stockfish.current.postMessage(`go ${depth}`);
+        stockfish.postMessage(`position fen ${fen}`);
+        stockfish.postMessage(`go ${depth}`);
     }, [fen, depth])
 
     return { uci }
