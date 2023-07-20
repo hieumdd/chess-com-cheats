@@ -22,23 +22,11 @@ function App() {
                     <div className="grid grid-cols-2 gap-4">
                         <h3>Lines</h3>
                         <div className="form-control">
-                            <input
-                                {...register('lines')}
-                                type="range"
-                                min={1}
-                                max={5}
-                                className="range"
-                            />
+                            <input {...register('lines')} type="range" min={1} max={5} className="range" />
                         </div>
                         <h3>Depth</h3>
                         <div className="form-control">
-                            <input
-                                {...register('depth')}
-                                type="range"
-                                min={1}
-                                max={31}
-                                className="range"
-                            />
+                            <input {...register('depth')} type="range" min={1} max={31} className="range" />
                         </div>
                         <h3>Enabled</h3>
                         <div className="form-control">

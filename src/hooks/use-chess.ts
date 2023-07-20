@@ -6,7 +6,7 @@ import { EvaluationOptions } from '../evaluation.type';
 export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
     const timerRef = useRef<number | null>(null);
     const game = useMemo(() => new Chess(), []);
-    const stockfish = useMemo(() => new Worker(`stockfish.js#stockfish.wasm`), [])
+    const stockfish = useMemo(() => new Worker(`stockfish.js#stockfish.wasm`), []);
 
     const [fen, setFen] = useState('start');
     const [uci, setUCI] = useState('');
@@ -16,13 +16,17 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
             timerRef.current = setInterval(() => {
                 chrome.tabs.query({ active: true, url: '*://*.chess.com/play*' }).then(([tab]) => {
                     if (tab) {
-                        chrome.tabs.sendMessage(tab.id as number, { type: 'GET_PGN' }).then((pgn) => {
-                            game.loadPgn(pgn);
-                            setFen(game.fen());
-                        })
+                        chrome.tabs
+                            .sendMessage(tab.id as number, {
+                                type: 'GET_PGN',
+                            })
+                            .then((pgn) => {
+                                game.loadPgn(pgn);
+                                setFen(game.fen());
+                            });
                     }
-                })
-            }, 2_000)
+                });
+            }, 2_000);
         } else {
             clearInterval(timerRef.current as number);
         }
@@ -32,16 +36,16 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
         stockfish.onmessage = (e) => {
             setUCI(e.data);
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         stockfish.postMessage(`setoption name MultiPV value ${lines}`);
-    }, [lines])
+    }, [lines]);
 
     useEffect(() => {
         stockfish.postMessage(`position fen ${fen}`);
         stockfish.postMessage(`go ${depth}`);
-    }, [fen, depth])
+    }, [fen, depth]);
 
-    return { uci }
+    return { uci };
 };

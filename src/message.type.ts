@@ -1,3 +1,3 @@
 export type Message = {
-    type: 'GET_PGN'
-}
+    type: 'GET_PGN';
+};
