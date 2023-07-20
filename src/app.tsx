@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { SettingsState, useSettingsStore } from './stores/settings.store';
 import { EvaluationOptions } from './services/evaluation.service';
 
 function App() {
@@ -8,21 +9,45 @@ function App() {
         defaultValues: {
             color: 'white',
             lines: '1',
-            depth: '31',
+            depth: '1',
             enabled: false,
         },
     });
 
-    const enabled = watch('enabled');
+    const enabledToggle = () => {
+        console.log(watch());
+    };
 
-    useEffect(() => {
-        if (enabled) {
-            console.log(watch());
-            chrome.runtime.sendMessage({ type: 'GET_PGN' }, (response) => {
-                console.log(response);
-            });
-        }
-    }, [watch, enabled]);
+    const onClick = () => {
+        chrome.tabs.query({});
+        chrome.tabs
+            .query({
+                active: true,
+                url: 'https://www.chess.com/play/computer',
+            })
+            .then(async ([tab]) => {
+                console.log(tab);
+                return chrome.tabs.sendMessage(tab.id as number, { type: 'GET_PGN' });
+            })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+    };
+
+    // useEffect(() => {
+    //     const x = setInterval(
+    //         () =>
+    //             chrome.tabs
+    //                 .query({ active: true, currentWindow: true })
+    //                 .then(([tab]) => {
+    //                     return chrome.tabs.sendMessage(tab.id as number, { type: 'GET_PGN' });
+    //                 })
+    //                 .then((response) => console.log(response))
+    //                 .catch((error) => console.log(error)),
+    //         500,
+    //     );
+
+    //     return () => clearInterval(x);
+    // }, []);
 
     return (
         <div className="p-2 flex flex-col gap-4">
@@ -76,7 +101,11 @@ function App() {
                         </div>
                         <h3>Enabled</h3>
                         <div className="form-control">
-                            <input {...register('enabled')} type="checkbox" className="toggle" />
+                            <input
+                                {...register('enabled', { onChange: enabledToggle })}
+                                type="checkbox"
+                                className="toggle"
+                            />
                         </div>
                     </div>
                 </form>
@@ -85,6 +114,7 @@ function App() {
                 <div className="card-body">
                     <h2 className="card-title">Evaluation</h2>
                     <p>{JSON.stringify(watch())}</p>
+                    <button onClick={onClick}> ABC</button>
                 </div>
             </div>
         </div>
