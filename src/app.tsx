@@ -12,7 +12,7 @@ function App() {
         },
     });
 
-    const { command, commandValue } = useChess(watch());
+    const { uci } = useChess(watch());
 
     return (
         <div className="p-2 flex flex-col gap-4">
@@ -50,12 +50,7 @@ function App() {
             <div className="card card-compact shadow">
                 <div className="card-body">
                     <h2 className="card-title">Evaluation</h2>
-                    <div className="grid grid-cols-2 gap-4">
-                        <p>Command</p>
-                        <p>{command || 'N/A'}</p>
-                        <p>Command Value</p>
-                        <p>{commandValue || 'N/A'}</p>
-                    </div>
+                    <p>{uci}</p>
                 </div>
             </div>
         </div>

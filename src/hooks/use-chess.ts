@@ -9,8 +9,7 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
     const stockfish = useRef(new Worker('stockfish.js'));
 
     const [fen, setFen] = useState('start');
-    const [command, setCommand] = useState('');
-    const [commandValue, setCommandValue] = useState('');
+    const [uci, setUCI] = useState('');
 
     useEffect(() => {
         if (enabled) {
@@ -33,9 +32,7 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
 
     useEffect(() => {
         stockfish.current.onmessage = (e) => {
-            const [command, ...args] = e.data.split(' ');
-            setCommand(command);
-            setCommandValue(args.join(' '))
+            setUCI(e.data);
         };
     }, [])
 
@@ -48,5 +45,5 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
         stockfish.current.postMessage(`go ${depth}`);
     }, [fen, depth])
 
-    return { command, commandValue }
+    return { uci }
 };
