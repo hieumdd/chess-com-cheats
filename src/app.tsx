@@ -14,8 +14,8 @@ function App() {
     const { bestMove } = useChess(watch());
 
     return (
-        <div className="p-2 flex flex-col gap-4">
-            <div className="card card-compact shadow">
+        <div className="flex flex-col gap-4 p-2">
+            <div className="shadow card card-compact">
                 <form className="card-body">
                     <div className="grid grid-cols-2 gap-4">
                         <h3>Depth</h3>
@@ -29,7 +29,7 @@ function App() {
                     </div>
                 </form>
             </div>
-            <div className="card card-compact shadow">
+            <div className="shadow card card-compact">
                 <div className="card-body">
                     <div className="stats min-h-[80px]">
                         {bestMove.bestMove && (
