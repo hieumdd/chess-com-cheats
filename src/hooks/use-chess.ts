@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 
-import { EvaluationOptions } from '../evaluation.type'
+import { EvaluationOptions } from '../evaluation.type';
 
 type BestMove = Partial<{ bestMove: string; ponder: string }>;
 
