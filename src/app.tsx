@@ -6,24 +6,18 @@ import { useChess } from './hooks/use-chess';
 function App() {
     const { register, watch } = useForm<EvaluationOptions>({
         defaultValues: {
-            lines: '1',
             depth: '21',
             enabled: false,
         },
     });
 
-    const { uci } = useChess(watch());
+    const { bestMove } = useChess(watch());
 
     return (
         <div className="p-2 flex flex-col gap-4">
             <div className="card card-compact shadow">
                 <form className="card-body">
-                    <h2 className="card-title">Settings</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <h3>Lines</h3>
-                        <div className="form-control">
-                            <input {...register('lines')} type="range" min={1} max={5} className="range" />
-                        </div>
                         <h3>Depth</h3>
                         <div className="form-control">
                             <input {...register('depth')} type="range" min={1} max={31} className="range" />
@@ -37,8 +31,20 @@ function App() {
             </div>
             <div className="card card-compact shadow">
                 <div className="card-body">
-                    <h2 className="card-title">Evaluation</h2>
-                    <p>{uci}</p>
+                    <div className="stats min-h-[80px]">
+                        {bestMove.bestMove && (
+                            <div className="stat">
+                                <div className="stat-title">Best move</div>
+                                <div className="stat-value">{bestMove.bestMove}</div>
+                            </div>
+                        )}
+                        {bestMove.ponder && (
+                            <div className="stat">
+                                <div className="stat-title">Ponder</div>
+                                <span className="stat-value">{bestMove.ponder}</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

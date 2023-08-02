@@ -3,24 +3,38 @@ import { Chess } from 'chess.js';
 
 import { EvaluationOptions } from '../evaluation.type';
 
-export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
+type BestMove = Partial<{ bestMove: string; ponder: string }>;
+
+export const useChess = ({ depth, enabled }: EvaluationOptions) => {
+    const stockfishOptions = useMemo(() => ({ lines: 1 }), []);
+
     const timerRef = useRef<number | null>(null);
     const game = useMemo(() => new Chess(), []);
+
+    const [bestMove, setBestMove] = useState<BestMove>({ bestMove: undefined, ponder: undefined });
+
     const stockfish = useMemo(() => {
         const worker = new Worker(`stockfish.js#stockfish.wasm`);
-        worker.onmessage = (e) => setUCI(e.data);
+        worker.onmessage = (e) => {
+            console.debug(e.data);
+
+            const commands = e.data.split(' ');
+            if (commands[0] === 'bestmove') {
+                setBestMove({ bestMove: commands[1], ponder: commands[3] });
+            }
+        };
+        worker.postMessage(`setoption name MultiPV value ${stockfishOptions.lines}`);
         return worker;
-    }, []);
+    }, [stockfishOptions.lines]);
 
     const [fen, setFen] = useState('start');
-    const [uci, setUCI] = useState('');
 
     useEffect(() => {
         if (enabled) {
             timerRef.current = setInterval(async () => {
                 const [tab] = await chrome.tabs.query({ active: true, url: '*://*.chess.com/*' });
                 if (tab && tab.id) {
-                    const pgn = await chrome.tabs.sendMessage(tab.id, null);
+                    const pgn = await chrome.tabs.sendMessage<any, string>(tab.id, undefined);
                     try {
                         game.loadPgn(pgn);
                         setFen(game.fen());
@@ -35,13 +49,9 @@ export const useChess = ({ lines, depth, enabled }: EvaluationOptions) => {
     }, [game, enabled]);
 
     useEffect(() => {
-        stockfish.postMessage(`setoption name MultiPV value ${lines}`);
-    }, [stockfish, lines]);
-
-    useEffect(() => {
         stockfish.postMessage(`position fen ${fen}`);
         stockfish.postMessage(`go ${depth}`);
     }, [stockfish, fen, depth]);
 
-    return { uci };
+    return { bestMove };
 };
