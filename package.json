@@ -1,11 +1,13 @@
 {
     "name": "chess-helper",
     "private": true,
-    "version": "0.0.0",
+    "version": "0.1.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "pack:unsigned": "crx pack ./dist --zip-output chess-helper.zip",
+        "pack:signed": "crx pack ./dist -o chess-helper.crx",
         "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
     },
@@ -24,6 +26,7 @@
         "@typescript-eslint/parser": "^6.2.1",
         "@vitejs/plugin-react-swc": "^3.3.2",
         "autoprefixer": "^10.4.14",
+        "crx": "^5.0.1",
         "daisyui": "^3.5.0",
         "eslint": "^8.46.0",
         "eslint-plugin-react-hooks": "^4.6.0",
