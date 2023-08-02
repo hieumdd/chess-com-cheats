@@ -20,7 +20,9 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build:pack
+      - run: |
+          npm run build
+          npm run pack
 
       - uses: softprops/action-gh-release@v1
         with:
