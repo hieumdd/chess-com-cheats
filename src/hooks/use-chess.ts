@@ -34,7 +34,7 @@ export const useChess = ({ depth, enabled }: EvaluationOptions) => {
             timerRef.current = setInterval(async () => {
                 const [tab] = await chrome.tabs.query({ active: true, url: '*://*.chess.com/*' });
                 if (tab && tab.id) {
-                    const pgn = await chrome.tabs.sendMessage(tab.id, null);
+                    const pgn = await chrome.tabs.sendMessage<any, string>(tab.id, undefined);
                     try {
                         game.loadPgn(pgn);
                         setFen(game.fen());
