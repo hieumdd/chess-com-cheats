@@ -1,11 +1,13 @@
 {
     "manifest_version": 3,
-    "name": "Chess.com Cheats",
+    "name": "Chess Helper",
     "version": "0.1.1",
     "icons": {
         "128": "icon128.png"
     },
-    "action": {},
+    "action": {
+        "default_title": "Chess Helper"
+    },
     "content_scripts": [
         {
             "matches": ["*://*.chess.com/*"],
@@ -17,5 +19,5 @@
         "service_worker": "service-worker.js",
         "type": "module"
     },
-    "permissions": ["activeTab"]
+    "permissions": ["activeTab", "sidePanel"]
 }
