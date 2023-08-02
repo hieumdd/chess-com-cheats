@@ -29,3 +29,5 @@ jobs:
           files: |
             chess-helper.crx
             chess-helper.zip
+          name: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
