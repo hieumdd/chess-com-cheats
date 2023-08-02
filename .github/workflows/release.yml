@@ -25,7 +25,8 @@ jobs:
 
       - run: |
           npm run build
-          npm run pack
+          npm run pack:unsigned
+          npm run pack:signed
 
       - uses: softprops/action-gh-release@v1
         with:
