@@ -11,7 +11,7 @@ function App() {
         },
     });
 
-    const { bestMove } = useChess(watch());
+    const { fen, bestMove } = useChess(watch());
 
     return (
         <div className="flex flex-col gap-4 p-2">
@@ -47,6 +47,7 @@ function App() {
                     </div>
                 </div>
             </div>
+            <div className="break-all alert">{fen}</div>
         </div>
     );
 }

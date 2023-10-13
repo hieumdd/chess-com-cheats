@@ -53,5 +53,5 @@ export const useChess = ({ depth, enabled }: EvaluationOptions) => {
         stockfish.postMessage(`go ${depth}`);
     }, [stockfish, fen, depth]);
 
-    return { bestMove };
+    return { fen, bestMove };
 };
