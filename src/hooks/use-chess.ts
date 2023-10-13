@@ -47,7 +47,7 @@ export const useChess = ({ enabled }: UseChessOptions) => {
                 setInput((state) => ({ ...state, pgn }));
                 try {
                     game.loadPgn(pgn);
-                    setInput((state) => ({ ...state, gen: game.fen() }));
+                    setInput((state) => ({ ...state, fen: game.fen() }));
                 } catch (error) {
                     console.log({ pgn, error });
                 }
