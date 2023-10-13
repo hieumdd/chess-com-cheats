@@ -46,7 +46,7 @@ function App() {
                             {input.fen && (
                                 <div className="chat chat-start">
                                     <div className="text-sm chat-header">FEN</div>
-                                    <div className="chat-bubble">{input.fen}</div>
+                                    <div className="break-all chat-bubble">{input.fen}</div>
                                 </div>
                             )}
                         </div>
