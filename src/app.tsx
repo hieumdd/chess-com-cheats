@@ -8,16 +8,11 @@ function App() {
 
     return (
         <div className="flex flex-col gap-4 p-2">
-            <div className="shadow card card-compact">
-                <form className="card-body">
-                    <div className="grid grid-cols-2 gap-4">
-                        <h3>Enabled</h3>
-                        <div className="form-control">
-                            <input {...register('enabled')} type="checkbox" className="toggle" />
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <form className="flex flex-row justify-end mt-2">
+                <div className="p-2 shadow rounded-2xl form-control">
+                    <input {...register('enabled')} type="checkbox" className="toggle" />
+                </div>
+            </form>
             <div className="shadow card card-compact">
                 <div className="card-body">
                     <div className="stats min-h-[80px]">
@@ -36,8 +31,28 @@ function App() {
                     </div>
                 </div>
             </div>
-            <div className="break-all alert">{input.pgn}</div>
-            <div className="break-all alert">{input.fen}</div>
+            <div className="shadow card card-compact">
+                <div className="card-body">
+                    <div className="collapse">
+                        <input type="checkbox" />
+                        <div className="text-xl font-medium collapse-title">...</div>
+                        <div className="p-0 collapse-content">
+                            {input.pgn && (
+                                <div className="chat chat-start">
+                                    <div className="text-sm chat-header">PGN</div>
+                                    <div className="chat-bubble">{input.pgn}</div>
+                                </div>
+                            )}
+                            {input.fen && (
+                                <div className="chat chat-start">
+                                    <div className="text-sm chat-header">FEN</div>
+                                    <div className="chat-bubble">{input.fen}</div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
